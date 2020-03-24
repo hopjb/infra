@@ -1,0 +1,8 @@
+resources:
+- namespace.yaml
+- hopjb-website.yaml
+
+namespace: hopjb-website
+
+commonLabels:
+  app: hopjb-website

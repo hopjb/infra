@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hopjb-website
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - name: web
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: web
+        hostPath:
+          path: /opt/hop/web/hopdl/www
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  hopjb-website
+spec:
+  ports:
+  - name: http
+    port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hopjb-website
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - hopjb.com
+    secretName: hopjb-com-tls
+  rules:
+  - host: hopjb.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: hopjb-website
+          servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hopjb-redirect
+  annotations:
+    nginx.ingress.kubernetes.io/temporal-redirect: https://hopjb.com
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - www.hopjb.com
+    secretName: www-hopjb-com-tls
+  rules:
+  - host: www.hopjb.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: hopjb-website
+          servicePort: 80

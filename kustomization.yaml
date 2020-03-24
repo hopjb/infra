@@ -1,0 +1,4 @@
+bases:
+- cert-manager/
+- ingress-nginx/
+- hopjb-website/
