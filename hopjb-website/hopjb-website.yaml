@@ -11,10 +11,20 @@ spec:
         volumeMounts:
         - name: web
           mountPath: /usr/share/nginx/html
+        - name: maps
+          mountPath: /usr/share/nginx/html/tf2dl/maps
+        - name: materials
+          mountPath: /usr/share/nginx/html/tf2dl/materials
       volumes:
       - name: web
         hostPath:
           path: /opt/hop/web/hopdl/www
+      - name: maps
+        hostPath:
+          path: /home/tf2/shared/tf/maps
+      - name: materials
+        hostPath:
+          path: /home/tf2/shared/tf/materials
 ---
 kind: Service
 apiVersion: v1
