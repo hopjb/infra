@@ -2,3 +2,4 @@ bases:
 - cert-manager/
 - ingress-nginx/
 - hopjb-website/
+- external-dns-operator/
